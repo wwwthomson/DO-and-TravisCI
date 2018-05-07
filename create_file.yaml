@@ -1,0 +1,4 @@
+- hosts: all
+  tasks:
+  - name: create files
+    raw: "echo 'test file' > test.yaml"

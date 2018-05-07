@@ -3,10 +3,13 @@ python:
   - 3.5
 install:
   - pip install -r requirements.txt
-before_install:
+before_script:
   - echo ${SSH_KEY} | base64 -d > /tmp/id_rsa
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/id_rsa
   - ssh-add /tmp/id_rsa
+  - python create_droplets.py
 script:
-  - python test.py
+  - ansible-playbook create_file.yaml -i inventory2
+after_script:
+  - python create_droplets.py
