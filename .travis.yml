@@ -12,4 +12,4 @@ before_script:
 script:
   - ansible-playbook create_file.yaml -i inventory2
 after_script:
-  - python create_droplets.py
+  - python delete_droplets.py
