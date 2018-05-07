@@ -11,6 +11,7 @@ before_script:
   - python create_droplets.py
 script:
   - cat inventory
+  - ssh root@104.236.251.204
   - ansible-playbook create_file.yaml -i inventory
 after_script:
   - python delete_droplets.py
