@@ -8,7 +8,7 @@ before_script:
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/id_rsa
   - ssh-add /tmp/id_rsa
-  - python create_droplets.py
+#  - python create_droplets.py
 script:
   - cat inventory
   - ssh root@104.236.251.204
