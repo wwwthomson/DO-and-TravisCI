@@ -35,4 +35,4 @@ if __name__ == "__main__":
     build_id = os.environ['TRAVIS_BUILD_ID']
     ssh_keys = os.environ['DO_SSH_KEYS']
     print(create_droplets(do_token, build_id, ssh_keys))
-    print(delete_droplets(do_token, build_id))
+    # print(delete_droplets(do_token, build_id))
