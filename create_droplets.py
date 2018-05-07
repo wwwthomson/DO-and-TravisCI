@@ -83,7 +83,7 @@ def change_inventory(inventory, network):
         public_ip = network[droplet]['public']
         private_ip = network[droplet]['private']
         param = "ansible_user=root ansible_host={} ansible_port=22 private_ip={}".format(public_ip, private_ip)
-        inventory.set("all:children", node, param)
+        inventory.set("all", node, param)
 
 
 def write_inventory(path, inventory):
@@ -101,4 +101,4 @@ if __name__ == "__main__":
     path = "inventory"
     inventory = get_inventory(path)
     change_inventory(inventory, network)
-    write_inventory("inventory2", inventory)
+    write_inventory("inventory", inventory)

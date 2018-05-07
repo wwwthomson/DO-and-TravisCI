@@ -9,9 +9,8 @@ before_script:
   - chmod 600 /tmp/id_rsa
   - ssh-add /tmp/id_rsa
   - python create_droplets.py
-  - cat inventory2
 script:
-  - cat inventory2
-  - ansible-playbook create_file.yaml -i inventory2
+  - cat inventory
+  - ansible-playbook create_file.yaml -i inventory
 after_script:
   - python delete_droplets.py
