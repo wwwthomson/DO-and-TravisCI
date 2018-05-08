@@ -13,4 +13,4 @@ def delete_droplets(token, tag):
 if __name__ == "__main__":
     token = os.environ['DO_TOKEN']
     tag = os.environ['TRAVIS_BUILD_ID']
-    # delete_droplets(token=token, tag=tag)
+    delete_droplets(token=token, tag=tag)
