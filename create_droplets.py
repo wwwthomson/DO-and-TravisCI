@@ -20,7 +20,7 @@ def create_droplets(token, tag, ssh_keys):
             "ipv6": False,
             "user_data": None,
             "private_networking": True,
-            "tags": [tag]}
+            "tags": ["travis-ci", tag]}
     r = requests.post(url, headers=headers, json=data)
     if 200 <= r.status_code < 300:
         print("droplets created")
@@ -32,17 +32,10 @@ def get_droplets(token, tag):
     r = requests.get(url, headers=headers, params=data)
     return json.loads(r.text)
 
-def delete_droplets(token, tag):
-    url = "https://api.digitalocean.com/v2/droplets"
-    headers = {"Authorization": "Bearer {}".format(token)}
-    data = {"tag_name": tag}
-    r = requests.delete(url, headers=headers, params=data)
-    return r.status_code
-
 def wait_status(token, tag):
     start = time.time()
     counter = 0
-    print("Wait for droplet")
+    print("Wait active status")
     while time.time() < start + 120:
         counter += 1
         print("# {}".format(counter))
@@ -55,6 +48,7 @@ def wait_status(token, tag):
             if status_droplet != "active":
                 all_status = False
         if all_status:
+            time.sleep(15) #wait loading
             break
         time.sleep(2)
 
@@ -86,19 +80,20 @@ def change_inventory(inventory, network):
         inventory.set("all", node, param)
 
 
-def write_inventory(path, inventory):
+def write_inventory(inventory, path=None):
     with open(path, 'w') as f:
         inventory.write(f)
 
+def get_env():
+    return os.environ['DO_TOKEN'], os.environ['TRAVIS_BUILD_ID'], os.environ['DO_SSH_KEYS']
 
 if __name__ == "__main__":
-    token = os.environ['DO_TOKEN']
-    tag = os.environ['TRAVIS_BUILD_ID']
-    ssh_keys = os.environ['DO_SSH_KEYS']
+    token, tag, ssh_keys = get_env()
+
     create_droplets(token, tag, ssh_keys)
     wait_status(token, tag)
+
     network = get_ip_for_droplets(token, tag)
-    path = "inventory"
-    inventory = get_inventory(path)
+    inventory = get_inventory(path="inventory")
     change_inventory(inventory, network)
-    write_inventory("inventory", inventory)
+    write_inventory(inventory, path="inventory")

@@ -1,4 +1,4 @@
 - hosts: masters
   tasks:
   - name: create files
-    raw: "bugecho 'test file' > test.yaml"
+    raw: "echo 'test file' > test.yaml"
