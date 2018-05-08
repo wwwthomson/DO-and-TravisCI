@@ -13,4 +13,4 @@ script:
   - cat inventory
   - ansible-playbook -e 'host_key_checking=False' create_file.yaml -i inventory
 after_script:
-  - python delete_droplets.py
+  - # python delete_droplets.py

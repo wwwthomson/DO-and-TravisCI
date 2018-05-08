@@ -48,7 +48,7 @@ def wait_status(token, tag):
             if status_droplet != "active":
                 all_status = False
         if all_status:
-            time.sleep(15) #wait loading
+            time.sleep(30) #wait loading
             break
         time.sleep(2)
 
