@@ -4,9 +4,6 @@ python:
 install:
   - pip install -r requirements.txt
 before_script:
-
-#  - python create_droplets.py
-script:
   - cat inventory
   - eval "$(ssh-agent -s)"
   - echo ${SSH_KEY} | base64 -d > /tmp/id_rsa
@@ -14,6 +11,8 @@ script:
   - chmod 600 /tmp/id_rsa
   - ssh-add /tmp/id_rsa
   - ssh -o "StrictHostKeyChecking no" root@104.236.92.224 'echo "file" > work'
+#  - python create_droplets.py
+script:
   - ansible-playbook -e 'host_key_checking=False' create_file.yaml -i inventory
 after_script:
   - python delete_droplets.py
