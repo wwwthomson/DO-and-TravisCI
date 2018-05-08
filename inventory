@@ -1,6 +1,6 @@
 [all]
-m1.train 	 ansible_user=root ansible_host=104.131.178.24 ansible_port=22 private_ip=10.132.40.194
-s1.train 	 ansible_user=root ansible_host=104.131.178.24 ansible_port=22 private_ip=10.132.40.206
+m1.train 	 ansible_user=root ansible_host=104.236.92.224 ansible_port=22 private_ip=10.132.40.194
+s1.train 	 ansible_user=root ansible_host=104.236.92.224 ansible_port=22 private_ip=10.132.40.206
 
 [masters]
 m1.train
