@@ -9,7 +9,7 @@ before_script:
 #  - python create_droplets.py
 script:
   - cat inventory
-    - eval "$(ssh-agent -s)"
+  - eval "$(ssh-agent -s)"
   - echo ${SSH_KEY} | base64 -d > /tmp/id_rsa
   - cat /tmp/id_rsa
   - chmod 600 /tmp/id_rsa
