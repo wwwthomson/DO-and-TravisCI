@@ -15,15 +15,18 @@ def create_droplets(token, tag, ssh_keys):
             "region": "nyc3",
             "size": "s-1vcpu-1gb",
             "image": "centos-7-x64",
-            "ssh_keys": [ssh_keys],
+            "ssh_keys": [ssh_keys, "bla"],
             "backups": False,
             "ipv6": False,
             "user_data": None,
             "private_networking": True,
-            "tags": ["travis-ci", tag]}
+            "tags": ["travis-ci", "do_and_travis", tag]}
     r = requests.post(url, headers=headers, json=data)
     if 200 <= r.status_code < 300:
         print("droplets created")
+    else:
+        print("droplets don't created: %s" % r.status_code)
+        exit(1)
 
 def get_droplets(token, tag):
     url = "https://api.digitalocean.com/v2/droplets"
@@ -89,6 +92,8 @@ def get_env():
 
 if __name__ == "__main__":
     token, tag, ssh_keys = get_env()
+    print(os.environ['TRAVIS_BUILD_DIR'])
+    print(os.path.dirname(os.path.abspath(__file__)))
 
     create_droplets(token, tag, ssh_keys)
     wait_status(token, tag)
