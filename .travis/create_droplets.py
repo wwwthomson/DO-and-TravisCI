@@ -15,7 +15,7 @@ def create_droplets(token, tag, ssh_keys):
             "region": "nyc3",
             "size": "s-1vcpu-1gb",
             "image": "centos-7-x64",
-            "ssh_keys": [ssh_keys, "bla"],
+            "ssh_keys": [ssh_keys],
             "backups": False,
             "ipv6": False,
             "user_data": None,
@@ -74,8 +74,8 @@ def get_inventory(path=None):
         inventory.read(path)
     return inventory
 
-def change_inventory(inventory, network):
-    for droplet in network:
+def change_inventory(inventory, droplets):
+    for droplet in droplets:
         node = droplet
         public_ip = network[droplet]['public']
         private_ip = network[droplet]['private']
@@ -87,18 +87,26 @@ def write_inventory(inventory, path=None):
     with open(path, 'w') as f:
         inventory.write(f)
 
+def write_ip_for_test(droplets, path=None):
+    with open(path, 'w') as f:
+        for droplet in droplets:
+            public_ip = network[droplet]['public']
+            f.write(public_ip + '\n')
+
 def get_env():
     return os.environ['DO_TOKEN'], os.environ['TRAVIS_BUILD_ID'], os.environ['DO_SSH_KEYS']
 
 if __name__ == "__main__":
     token, tag, ssh_keys = get_env()
-    print(os.environ['TRAVIS_BUILD_DIR'])
-    print(os.path.dirname(os.path.abspath(__file__)))
+    path_to_repos = os.environ['TRAVIS_BUILD_DIR']
+    path_to_inventory = os.path.join(path_to_repos, "inventory")
+    path_to_listip = os.path.join(path_to_repos, ".travis/listip")
 
     create_droplets(token, tag, ssh_keys)
     wait_status(token, tag)
 
     network = get_ip_for_droplets(token, tag)
-    inventory = get_inventory(path="inventory")
+    inventory = get_inventory(path=path_to_inventory)
     change_inventory(inventory, network)
-    write_inventory(inventory, path="inventory")
+    write_inventory(inventory, path=path_to_inventory)
+    write_ip_for_test(network, path_to_listip)
